@@ -3,6 +3,7 @@ A small demo library for MGGY-8411 Data Engineering B, NYU Tandon.
 
 ### Installation
 ```
+pip install polygon-api-client==0.2.11
 pip install DE-FOREX-Library
 ```
 

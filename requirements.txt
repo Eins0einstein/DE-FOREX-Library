@@ -1,4 +1,4 @@
 matplotlib
 datetime
 sqlalchemy
-polygon-api-client #The original code of Max use version 0.2.11 of Polygon API library
+polygon-api-client==0.2.11 #The original code of Max use version 0.2.11 of Polygon API library

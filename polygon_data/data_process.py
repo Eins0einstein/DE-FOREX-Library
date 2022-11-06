@@ -246,3 +246,15 @@ class data_process_helper:
                     # Write the data to the SQLite database, raw data tables
                     with engine.begin() as conn:
                         conn.execute(text("INSERT INTO "+from_+to+"_raw(ticktime, fxrate, inserttime) VALUES (:ticktime, :fxrate, :inserttime)"),[{"ticktime": dt, "fxrate": avg_price, "inserttime": insert_time}])
+
+    def test_group_daily(self,date):
+        """test whether the key works 
+
+        Parameters
+        ----------
+        self:data_process_helper
+        date:the date of data
+        """
+        with RESTClient(self.key) as client:
+            test = client.forex_currencies_grouped_daily(date)
+        return test

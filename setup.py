@@ -15,7 +15,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="DE-FOREX-Library",
-    version="0.0.2",
+    version="0.0.4",
     description="Demo library",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -36,5 +36,5 @@ setup(
     ],
     packages=["polygon_data"],
     include_package_data=True,
-    install_requires=["polygon"]
+    install_requires=["polygon-api-client==0.2.11"]
 )
