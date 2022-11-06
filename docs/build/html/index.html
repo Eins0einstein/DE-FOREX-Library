@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to DE Forex Library’s documentation! &mdash; DE Forex Library  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> DE Forex Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to DE Forex Library’s documentation!</a><ul>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper"><code class="docutils literal notranslate"><span class="pre">data_process_helper</span></code></a><ul>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.aggregate_raw_data_tables"><code class="docutils literal notranslate"><span class="pre">data_process_helper.aggregate_raw_data_tables()</span></code></a></li>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.collect_data"><code class="docutils literal notranslate"><span class="pre">data_process_helper.collect_data()</span></code></a></li>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.initialize_aggregated_tables"><code class="docutils literal notranslate"><span class="pre">data_process_helper.initialize_aggregated_tables()</span></code></a></li>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.initialize_raw_data_tables"><code class="docutils literal notranslate"><span class="pre">data_process_helper.initialize_raw_data_tables()</span></code></a></li>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.reset_raw_data_tables"><code class="docutils literal notranslate"><span class="pre">data_process_helper.reset_raw_data_tables()</span></code></a></li>
+<li><a class="reference internal" href="#polygon_data.data_process.data_process_helper.ts_to_datetime"><code class="docutils literal notranslate"><span class="pre">data_process_helper.ts_to_datetime()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">DE Forex Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Welcome to DE Forex Library’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-polygon_data.data_process">
+<span id="welcome-to-de-forex-library-s-documentation"></span><h1>Welcome to DE Forex Library’s documentation!<a class="headerlink" href="#module-polygon_data.data_process" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polygon_data.data_process.</span></span><span class="sig-name descname"><span class="pre">data_process_helper</span></span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper" title="Permalink to this definition"></a></dt>
+<dd><p>This class will request currency conversion data via Polygon API, convert and store them</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.aggregate_raw_data_tables">
+<span class="sig-name descname"><span class="pre">aggregate_raw_data_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.aggregate_raw_data_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.aggregate_raw_data_tables" title="Permalink to this definition"></a></dt>
+<dd><p>processed data and store it</p>
+<p>This function is called every 6 minutes to aggregate the data, store it in the aggregate table, and then delete the raw data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#polygon_data.data_process.data_process_helper" title="polygon_data.data_process.data_process_helper"><em>data_process_helper</em></a>) – </p></li>
+<li><p><strong>engine</strong> (<em>sqlite connection</em>) – </p></li>
+<li><p><strong>currency_pairs</strong> (<em>currency pairs like USD and AUD</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.collect_data">
+<span class="sig-name descname"><span class="pre">collect_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currency_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.collect_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.collect_data" title="Permalink to this definition"></a></dt>
+<dd><p>acquire data from Polygon API repeatedly</p>
+<p>This main function repeatedly calls the polygon api every 1 seconds for 24 hours and use function above to store the results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#polygon_data.data_process.data_process_helper" title="polygon_data.data_process.data_process_helper"><em>data_process_helper</em></a>) – </p></li>
+<li><p><strong>currency_pairs</strong> (<em>currency pairs like USD and AUD</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.initialize_aggregated_tables">
+<span class="sig-name descname"><span class="pre">initialize_aggregated_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.initialize_aggregated_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.initialize_aggregated_tables" title="Permalink to this definition"></a></dt>
+<dd><p>initialize the processed data table</p>
+<p>This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#polygon_data.data_process.data_process_helper" title="polygon_data.data_process.data_process_helper"><em>data_process_helper</em></a>) – </p></li>
+<li><p><strong>engine</strong> (<em>sqlite connection</em>) – </p></li>
+<li><p><strong>currency_pairs</strong> (<em>currency pairs like USD and AUD</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.initialize_raw_data_tables">
+<span class="sig-name descname"><span class="pre">initialize_raw_data_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.initialize_raw_data_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.initialize_raw_data_tables" title="Permalink to this definition"></a></dt>
+<dd><p>initialize the raw data table</p>
+<p>This creates a table for storing the raw, unaggregated price data for each currency pair in the SQLite database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#polygon_data.data_process.data_process_helper" title="polygon_data.data_process.data_process_helper"><em>data_process_helper</em></a>) – </p></li>
+<li><p><strong>engine</strong> (<em>sqlite connection</em>) – </p></li>
+<li><p><strong>currency_pairs</strong> (<em>currency pairs like USD and AUD</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.reset_raw_data_tables">
+<span class="sig-name descname"><span class="pre">reset_raw_data_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency_pairs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.reset_raw_data_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.reset_raw_data_tables" title="Permalink to this definition"></a></dt>
+<dd><p>clear the useless raw data</p>
+<p>Function which clears the raw data tables once we have aggregated the data in a 6 minute interval</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<a class="reference internal" href="#polygon_data.data_process.data_process_helper" title="polygon_data.data_process.data_process_helper"><em>data_process_helper</em></a>) – </p></li>
+<li><p><strong>engine</strong> (<em>sqlite connection</em>) – </p></li>
+<li><p><strong>currency_pairs</strong> (<em>currency pairs like USD and AUD</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polygon_data.data_process.data_process_helper.ts_to_datetime">
+<span class="sig-name descname"><span class="pre">ts_to_datetime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/polygon_data/data_process.html#data_process_helper.ts_to_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#polygon_data.data_process.data_process_helper.ts_to_datetime" title="Permalink to this definition"></a></dt>
+<dd><p>convert the data type of timestamp</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ts</strong> (<em>timestamp</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, TW.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

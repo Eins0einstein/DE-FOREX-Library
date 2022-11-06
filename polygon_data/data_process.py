@@ -10,38 +10,86 @@ from math import isnan
 
 class data_process_helper:
     """
+    This class will request currency conversion data via Polygon API, convert and store them
     """
 
     def __init__(self):
-    # The api key given by the professor
+        """initialize class
+
+        Pass The api key given by the professor
+
+        Parameters
+        ----------
+        self:data_process_helper
+        """
         self.key = "beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq"
 
-    # Function slightly modified from polygon sample code to format the date string 
     def ts_to_datetime(ts) -> str:
+        """convert the data type of timestamp
+
+        Parameters
+        ----------
+        ts:timestamp
+        """
         return datetime.datetime.fromtimestamp(ts / 1000.0).strftime('%Y-%m-%d %H:%M:%S')
 
-    # Function which clears the raw data tables once we have aggregated the data in a 6 minute interval
     def reset_raw_data_tables(self,engine,currency_pairs):
+        """clear the useless raw data 
+
+        Function which clears the raw data tables once we have aggregated the data in a 6 minute interval
+
+        Parameters
+        ----------
+        self:data_process_helper
+        engine:sqlite connection
+        currency_pairs:currency pairs like USD and AUD
+        """
         with engine.begin() as conn:
             for curr in currency_pairs:
                 conn.execute(text("DROP TABLE "+curr[0]+curr[1]+"_raw;"))
                 conn.execute(text("CREATE TABLE "+curr[0]+curr[1]+"_raw(ticktime text, fxrate  numeric, inserttime text);"))
 
-    # This creates a table for storing the raw, unaggregated price data for each currency pair in the SQLite database
     def initialize_raw_data_tables(self,engine,currency_pairs):
+        """initialize the raw data table 
+
+        This creates a table for storing the raw, unaggregated price data for each currency pair in the SQLite database
+
+        Parameters
+        ----------
+        self:data_process_helper
+        engine:sqlite connection
+        currency_pairs:currency pairs like USD and AUD
+        """
         with engine.begin() as conn:
             for curr in currency_pairs:
                 conn.execute(text("CREATE TABLE "+curr[0]+curr[1]+"_raw(ticktime text, fxrate  numeric, inserttime text);"))
-
-    # This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database            
+   
     def initialize_aggregated_tables(self,engine,currency_pairs):
+        """initialize the processed data table 
+
+        This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database
+
+        Parameters
+        ----------
+        self:data_process_helper
+        engine:sqlite connection
+        currency_pairs:currency pairs like USD and AUD
+        """
         with engine.begin() as conn:
             for curr in currency_pairs:
                 conn.execute(text("CREATE TABLE "+curr[0]+curr[1]+"_agg(inserttime text, avgfxrate  numeric, stdfxrate numeric);"))
 
-    # This function is called every 6 minutes to aggregate the data, store it in the aggregate table, 
-    # and then delete the raw data
     def aggregate_raw_data_tables(self,engine,currency_pairs):
+        """processed data and store it 
+
+        This function is called every 6 minutes to aggregate the data, store it in the aggregate table, and then delete the raw data
+
+        Parameters
+        ----------
+        self:data_process_helper
+        engine:sqlite connection
+        currency_pairs:currency pairs like USD and AUD
+        """
         with engine.begin() as conn:
             for curr in currency_pairs:
                 result = conn.execute(text("SELECT AVG(fxrate) as avg_price, COUNT(fxrate) as tot_count FROM "+curr[0]+curr[1]+"_raw;"))
@@ -129,9 +177,16 @@ class data_process_helper:
                 except:
                     pass
 
-    # This main function repeatedly calls the polygon api every 1 seconds for 24 hours 
-    # and stores the results.
-    def collect_data(self,currency_pairs):        
+    def collect_data(self,currency_pairs):
+        """acquire data from Polygon API repeatedly
+        
+        This main function repeatedly calls the polygon api every 1 seconds for 24 hours and use function above to store the results.
+
+        Parameters
+        ----------
+        self:data_process_helper
+        currency_pairs:currency pairs like USD and AUD
+        """
         # Number of list iterations - each one should last about 1 second
         count = 0
         agg_count = 0

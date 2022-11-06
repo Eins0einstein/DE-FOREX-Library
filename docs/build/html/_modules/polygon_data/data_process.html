@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>polygon_data.data_process &mdash; DE Forex Library  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> DE Forex Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DE Forex Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">polygon_data.data_process</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for polygon_data.data_process</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Import required libraries</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">polygon</span> <span class="kn">import</span> <span class="n">RESTClient</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span> 
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">text</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">isnan</span>
+
+
+<div class="viewcode-block" id="data_process_helper"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper">[docs]</a><span class="k">class</span> <span class="nc">data_process_helper</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class will request currency conversion data via Polygon API, convert and store them</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize class</span>
+
+<span class="sd">        Pass The api key given by the professor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;beBybSi8daPgsTp5yx5cHtHpYcrjp5Jq&quot;</span>
+
+<div class="viewcode-block" id="data_process_helper.ts_to_datetime"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.ts_to_datetime">[docs]</a>    <span class="k">def</span> <span class="nf">ts_to_datetime</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;convert the data type of timestamp</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ts:timestamp</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="data_process_helper.reset_raw_data_tables"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.reset_raw_data_tables">[docs]</a>    <span class="k">def</span> <span class="nf">reset_raw_data_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;clear the useless raw data </span>
+
+<span class="sd">        Function which clears the raw data tables once we have aggregated the data in a 6 minute interval</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        engine:sqlite connection</span>
+<span class="sd">        currency_pairs:currency pairs like USD and AUD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">curr</span> <span class="ow">in</span> <span class="n">currency_pairs</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;DROP TABLE &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw;&quot;</span><span class="p">))</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw(ticktime text, fxrate  numeric, inserttime text);&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="data_process_helper.initialize_raw_data_tables"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.initialize_raw_data_tables">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_raw_data_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize the raw data table </span>
+
+<span class="sd">        This creates a table for storing the raw, unaggregated price data for each currency pair in the SQLite database</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        engine:sqlite connection</span>
+<span class="sd">        currency_pairs:currency pairs like USD and AUD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">curr</span> <span class="ow">in</span> <span class="n">currency_pairs</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw(ticktime text, fxrate  numeric, inserttime text);&quot;</span><span class="p">))</span></div>
+   
+<div class="viewcode-block" id="data_process_helper.initialize_aggregated_tables"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.initialize_aggregated_tables">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_aggregated_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize the processed data table </span>
+
+<span class="sd">        This creates a table for storing the (6 min interval) aggregated price data for each currency pair in the SQLite database</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        engine:sqlite connection</span>
+<span class="sd">        currency_pairs:currency pairs like USD and AUD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">curr</span> <span class="ow">in</span> <span class="n">currency_pairs</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_agg(inserttime text, avgfxrate  numeric, stdfxrate numeric);&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="data_process_helper.aggregate_raw_data_tables"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.aggregate_raw_data_tables">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_raw_data_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;processed data and store it </span>
+
+<span class="sd">        This function is called every 6 minutes to aggregate the data, store it in the aggregate table, and then delete the raw data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        engine:sqlite connection</span>
+<span class="sd">        currency_pairs:currency pairs like USD and AUD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">curr</span> <span class="ow">in</span> <span class="n">currency_pairs</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT AVG(fxrate) as avg_price, COUNT(fxrate) as tot_count FROM &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw;&quot;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                    <span class="n">avg_price</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">avg_price</span>
+                    <span class="n">tot_count</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">tot_count</span>
+                <span class="n">std_res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT SUM((fxrate - &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">avg_price</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;)*(fxrate - &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">avg_price</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;))/(&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">tot_count</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;-1) as std_price FROM &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw;&quot;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">std_res</span><span class="p">:</span>
+                    <span class="n">std_price</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">std_price</span><span class="p">)</span>
+                <span class="n">date_res</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;SELECT MAX(ticktime) as last_date FROM &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_raw;&quot;</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">date_res</span><span class="p">:</span>
+                    <span class="n">last_date</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">last_date</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;INSERT INTO &quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_agg (inserttime, avgfxrate, stdfxrate) VALUES (:inserttime, :avgfxrate, :stdfxrate);&quot;</span><span class="p">),[{</span><span class="s2">&quot;inserttime&quot;</span><span class="p">:</span> <span class="n">last_date</span><span class="p">,</span> <span class="s2">&quot;avgfxrate&quot;</span><span class="p">:</span> <span class="n">avg_price</span><span class="p">,</span> <span class="s2">&quot;stdfxrate&quot;</span><span class="p">:</span> <span class="n">std_price</span><span class="p">}])</span>
+                
+                <span class="c1"># This calculates and stores the return values</span>
+                <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;curr[2].append(&quot;</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">curr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;_return(last_date,avg_price))&quot;</span><span class="p">)</span>
+                <span class="c1">#exec(&quot;print(\&quot;The return for &quot;+curr[0]+curr[1]+&quot; is:&quot;+str(curr[2][-1].hist_return)+&quot; \&quot;)&quot;)</span>
+                
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">avg_pop_value</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">hist_return</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">avg_pop_value</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">avg_pop_value</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="n">avg_pop_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">avg_pop_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># Calculate the average return value and print it/store it</span>
+                <span class="n">curr_avg</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_avg</span><span class="p">(</span><span class="n">avg_pop_value</span><span class="p">)</span>
+                <span class="c1">#exec(&quot;print(\&quot;The average return for &quot;+curr[0]+curr[1]+&quot; is:&quot;+str(curr_avg)+&quot; \&quot;)&quot;)</span>
+                
+                <span class="c1"># Now that we have the average return, loop through the last 5 rows in the list to start compiling the </span>
+                <span class="c1"># data needed to calculate the standard deviation</span>
+                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+                    <span class="n">row</span><span class="o">.</span><span class="n">add_to_running_squared_sum</span><span class="p">(</span><span class="n">curr_avg</span><span class="p">)</span>
+                
+                <span class="c1"># Calculate the standard dev using the avg</span>
+                <span class="n">curr_std</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_std</span><span class="p">()</span>
+                <span class="c1">#exec(&quot;print(\&quot;The standard deviation of the return for &quot;+curr[0]+curr[1]+&quot; is:&quot;+str(curr_std)+&quot; \&quot;)&quot;)</span>
+                
+                <span class="c1"># Calculate the average standard dev</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">pop_value</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">std_return</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">pop_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pop_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">curr_avg_std</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_avg_std</span><span class="p">(</span><span class="n">pop_value</span><span class="p">)</span>
+                <span class="c1">#exec(&quot;print(\&quot;The average standard deviation of the return for &quot;+curr[0]+curr[1]+&quot; is:&quot;+str(curr_avg_std)+&quot; \&quot;)&quot;)</span>
+                
+                <span class="c1"># -------------------Investment Strategy-----------------------------------------------</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">return_value</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist_return</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">return_value</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">return_value</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">return_value</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">return_value_1</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">hist_return</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">return_value_1</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">return_value_1</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">return_value_1</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">return_value_2</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">hist_return</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">return_value_2</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">return_value_2</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">return_value_2</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">upp_band</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">avg_return</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">std_return</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">return_value</span> <span class="o">&gt;=</span> <span class="n">upp_band</span> <span class="ow">and</span> <span class="n">curr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Prev_Action_was_Buy</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">return_value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1">#  (return_value &gt; 0) and (return_value_1 &gt; 0) and   </span>
+                        <span class="n">curr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sell_curr</span><span class="p">(</span><span class="n">avg_price</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">loww_band</span> <span class="o">=</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">avg_return</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">curr</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">std_return</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">return_value</span> <span class="o">&lt;=</span> <span class="n">loww_band</span> <span class="ow">and</span> <span class="n">curr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">Prev_Action_was_Buy</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">return_value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># and  (return_value &lt; 0) and (return_value_1 &lt; 0)</span>
+                        <span class="n">curr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">buy_curr</span><span class="p">(</span><span class="n">avg_price</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="data_process_helper.collect_data"><a class="viewcode-back" href="../../index.html#polygon_data.data_process.data_process_helper.collect_data">[docs]</a>    <span class="k">def</span> <span class="nf">collect_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;acquire data from Polygon API repeatedly</span>
+<span class="sd">        </span>
+<span class="sd">        This main function repeatedly calls the polygon api every 1 seconds for 24 hours and use function above to store the results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self:data_process_helper</span>
+<span class="sd">        currency_pairs:currency pairs like USD and AUD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Number of list iterations - each one should last about 1 second</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">agg_count</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="c1"># Create an engine to connect to the database; setting echo to false should stop it from logging in std.out</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;sqlite+pysqlite:///sqlite/final.db&quot;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">future</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># Create the needed tables in the database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_raw_data_tables</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_aggregated_tables</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">)</span>
+        
+        <span class="c1"># Open a RESTClient for making the api calls</span>
+        <span class="k">with</span> <span class="n">RESTClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="c1"># Loop that runs until the total duration of the program hits 24 hours. </span>
+            <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> 
+                <span class="c1"># Actually we need collect data of 24 hours, but we are not authorized</span>
+                <span class="c1"># to access to the database. So let&#39;s try just one time</span>
+                <span class="c1"># Make a check to see if 6 minutes has been reached or not</span>
+                <span class="k">if</span> <span class="n">agg_count</span> <span class="o">==</span> <span class="mi">360</span><span class="p">:</span>
+                    <span class="c1"># Aggregate the data and clear the raw data tables</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">aggregate_raw_data_tables</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reset_raw_data_tables</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span><span class="n">currency_pairs</span><span class="p">)</span>
+                    <span class="n">agg_count</span> <span class="o">=</span> <span class="mi">0</span>
+                
+                <span class="c1"># Only call the api every 1 second, so wait here for 0.85 seconds, because the </span>
+                <span class="c1"># code takes about .15 seconds to run</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.85</span><span class="p">)</span>
+                
+                <span class="c1"># Increment the counters</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">agg_count</span> <span class="o">+=</span><span class="mi">1</span>
+
+                <span class="c1"># Loop through each currency pair</span>
+                <span class="k">for</span> <span class="n">currency</span> <span class="ow">in</span> <span class="n">currency_pairs</span><span class="p">:</span>
+                    <span class="c1"># Set the input variables to the API</span>
+                    <span class="n">from_</span> <span class="o">=</span> <span class="n">currency</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">to</span> <span class="o">=</span> <span class="n">currency</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="c1"># Call the API with the required parameters</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">forex_currencies_real_time_currency_conversion</span><span class="p">(</span><span class="n">from_</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># This gets the Last Trade object defined in the API Resource</span>
+                    <span class="n">last_trade</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">last</span>
+
+                    <span class="c1"># Format the timestamp from the result</span>
+                    <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ts_to_datetime</span><span class="p">(</span><span class="n">last_trade</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+
+                    <span class="c1"># Get the current time and format it</span>
+                    <span class="n">insert_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+                    
+                    <span class="c1"># Calculate the price by taking the average of the bid and ask prices</span>
+                    <span class="n">avg_price</span> <span class="o">=</span> <span class="p">(</span><span class="n">last_trade</span><span class="p">[</span><span class="s1">&#39;bid&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">last_trade</span><span class="p">[</span><span class="s1">&#39;ask&#39;</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+
+                    <span class="c1"># Write the data to the SQLite database, raw data tables</span>
+                    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+                        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;INSERT INTO &quot;</span><span class="o">+</span><span class="n">from_</span><span class="o">+</span><span class="n">to</span><span class="o">+</span><span class="s2">&quot;_raw(ticktime, fxrate, inserttime) VALUES (:ticktime, :fxrate, :inserttime)&quot;</span><span class="p">),[{</span><span class="s2">&quot;ticktime&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="s2">&quot;fxrate&quot;</span><span class="p">:</span> <span class="n">avg_price</span><span class="p">,</span> <span class="s2">&quot;inserttime&quot;</span><span class="p">:</span> <span class="n">insert_time</span><span class="p">}])</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, TW.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

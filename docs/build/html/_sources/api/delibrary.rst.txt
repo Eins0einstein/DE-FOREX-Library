@@ -1,0 +1,9 @@
+================
+DE Forex Library
+================
+
+.. currentmodule:: polygon_data.data_process
+
+.. Don't include inherited members to keep the doc short
+.. autoclass:: polygon_data.data_process
+    :members:

@@ -1,4 +1,4 @@
-max_code:
+max-code:
     sqlalchemy
     math
     matplotlib.pyplot
