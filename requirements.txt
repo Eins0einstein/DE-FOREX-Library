@@ -1,5 +1,3 @@
-sqlalchemy
-math
 matplotlib.pyplot
 datetime
 time
