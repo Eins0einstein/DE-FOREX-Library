@@ -15,11 +15,11 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="DE-FOREX-Library",
-    version="0.0.1",
+    version="0.0.2",
     description="Demo library",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://DE-FOREX-Library.readthedocs.io/",
+    url="https://de-forex-library.readthedocs.io/",
     author="Tianyi Wu",
     author_email="tw2709@nyu.edu",
     license="MIT",
