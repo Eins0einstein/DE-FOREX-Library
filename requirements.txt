@@ -1,7 +1,4 @@
-sqlalchemy
-math
-matplotlib.pyplot
+matplotlib
 datetime
-time
 sqlalchemy
 polygon-api-client #The original code of Max use version 0.2.11 of Polygon API library
