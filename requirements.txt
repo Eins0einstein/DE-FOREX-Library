@@ -1,0 +1,11 @@
+max_code:
+    sqlalchemy
+    math
+    matplotlib.pyplot
+
+polygon_data:
+    datetime
+    time
+    sqlalchemy
+    math
+    polygon-api-client 0.2.11 #The original code of Max use this version of Polygon API library
