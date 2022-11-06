@@ -1,4 +1,4 @@
-matplotlib.pyplot
+matplotlib
 datetime
 time
 sqlalchemy
